@@ -1,2 +1,2 @@
-# RESTfulAPI-python-docker
+# RESTful-python-docker
 A Simple RESTful API with python flask
