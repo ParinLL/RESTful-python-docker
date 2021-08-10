@@ -1,19 +1,11 @@
 from flask import Flask,jsonify,request
 from flask_restful import Resource, Api,abort,reqparse
-import os
+import os,uuid
 
 app = Flask(__name__)
 api = Api(app)
 
-USERS = {
-    "user1": {"name": "John Lee",
-              "job_title": "SRE",
-              "communicate_information": {
-                "email": "jhon.lee@testmail.com",
-                "mobile": "09xx-xxx-xxx"
-                }
-            }
-}
+USERS = {}
 
 PORT = os.getenv('FLASK_PORT','80')
 
@@ -38,13 +30,12 @@ class User(Resource):
 
     def delete(self, USER_id):
         abort_if_user_doesnt_exist(USER_id)
-        user_num=USERS[USER_id]
         del USERS[USER_id]
         # return '', 204
         # resp=USERS[USER_id]
         # respond=jsonify(resp)
         # respond.status_code=204
-        return "User has been deleted",204
+        return '', 204
 
     def put(self, USER_id):
         abort_if_user_doesnt_exist(USER_id)
@@ -76,8 +67,10 @@ class UserList(Resource):
 
     def post(self):
         args = parser.parse_args()
-        USER_id = int(max(USERS.keys()).lstrip('user')) + 1
-        USER_id = 'user%i' % USER_id
+        # USER_id = int(max(USERS.keys()).lstrip('user')) + 1
+        # USER_id = 'user%i' % USER_id
+        my_uuid=uuid.uuid4()
+        USER_id=str(my_uuid)
         user = {
             USER_id:{
             'name': args['name'],
